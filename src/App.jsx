@@ -1,115 +1,81 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import EdiText from 'react-editext';
 import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
+
 const Quill = ReactQuill.Quill;
 var Font = Quill.import("formats/font");
-//Font.whitelist = ["Sans-Serif","Monospace","Serif", "Poppins", "Montserrat", "Lato", "Mulish"];
 Font.whitelist = ["Poppins", "Montserrat", "Lato", "Mulish"];
 Quill.register(Font, true);
 
-const arrayList = [{
+const initialCard = {
   card_num: 123,
   card_title: "Lorem ipsum",
   card_description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut. Etiam imperdiet fermentum consectetur. Vivamus sagittis, enim quis ullamcorper iaculis",
   card_button: "Save",
   card_delete: true,
   card_id: 1,
-}];
+};
 
 export default function App() {
-  const [cardDetails, setCardDetails] = useState(arrayList);
-  const [editing, setEditing] = useState(false);
+  const [cardDetails, setCardDetails] = useState([initialCard]);
 
-  const handleAddCard = (id) => {
-    var temparray = [...cardDetails];
-    temparray.push({
-      card_num: 123,
-      card_header: "Lorem ipsum",
-      card_sub_header: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut. Etiam imperdiet fermentum consectetur. Vivamus sagittis, enim quis ullamcorper iaculis",
-      card_button: "Save",
-      card_header_edit: true,
-      card_sub_header_edit: true,
-      card_header_add: true,
-      card_sub_header_add: true,
-      card_delete: true,
-      card_id: 1,
-    });
-    console.log(temparray);
-    setCardDetails(temparray);
-  }
+  const handleAddCard = () => {
+    if (cardDetails.length < 9) {
+      const newCard = {
+        ...initialCard,
+        card_id: cardDetails.length + 1,
+      };
+      setCardDetails([...cardDetails, newCard]);
+    }
+  };
+
   const handleCardDelete = (id) => {
-    var temparray = [...cardDetails];
-    var myArray = temparray.splice(id, 1);
-    console.log(temparray);
-    setCardDetails(temparray);
-  }
+    const updatedCards = cardDetails.filter((card) => card.card_id !== id);
+    setCardDetails(updatedCards);
+  };
 
-  const handleCardDeleteButton = (id) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_delete = false;
-    setCardDetails(temparray);
-  }
-
-  const handleAddCardButton = (id) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_delete = true;
-    setCardDetails(temparray);
-  }
-  const handleSaveFirst = (id, value) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_header = value;
-    setCardDetails(temparray);
-  }
-  const handleClickHFFFirst = (id) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_header_edit = true;
-    if (temparray[id].card_header === "" || temparray[id].card_header === "<p><br></p>") {
-      temparray[id].card_header_add = false;
-    } else {
-      temparray[id].card_header_add = true;
-    }
-    setCardDetails(temparray);
-  }
-
-  const handleClickHFFSecond = (id) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_sub_header_edit = true;
-    if (temparray[id].card_sub_header === "" || temparray[id].card_sub_header === "<p><br></p>") {
-      temparray[id].card_sub_header_add = false;
-    } else {
-      temparray[id].card_sub_header_add = true;
-    }
-    setCardDetails(temparray);
-  }
-
-  const setShowHeaderTextEdit = (id) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_header_edit = false;
-    setCardDetails(temparray);
-  }
-
-  const setShowSubHeaderTextEdit = (id) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_sub_header_edit = false;
-    setCardDetails(temparray);
-  }
-  const handleSaveSecond = (id, value) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_sub_header = value;
-    setCardDetails(temparray);
-  }
-
-  const handleSaveButton = (value, id) => {
-    var temparray = [...cardDetails];
-    temparray[id].card_button = value;
-    setCardDetails(temparray);
-  }
+  const handleEditCard = (id, field, value) => {
+    const updatedCards = cardDetails.map((card) =>
+      card.card_id === id ? { ...card, [field]: value } : card
+    );
+    setCardDetails(updatedCards);
+  };
 
   return (
-    <div className='Whole-card'>
-
+    <div className="container mt-5">
+      <div className="row">
+        {cardDetails.map((item) => (
+          <div key={item.card_id} className="col-md-4 mb-3">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">
+                  <EdiText
+                    type="text"
+                    value={item.card_title}
+                    onSave={(value) => handleEditCard(item.card_id, 'card_title', value)}
+                  />
+                </h5>
+                <ReactQuill
+                  value={item.card_description}
+                  onChange={(value) => handleEditCard(item.card_id, 'card_description', value)}
+                />
+                {item.card_delete ? (
+                  <button className="btn btn-danger" onClick={() => handleCardDelete(item.card_id)}>Delete</button>
+                ) : (
+                  <button className="btn btn-success" onClick={() => handleEditCard(item.card_id, 'card_delete', true)}>Undo Delete</button>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+        {cardDetails.length < 9 && (
+          <div className="col-md-4 mb-3">
+            <button className="btn btn-primary" onClick={handleAddCard}>Add Card</button>
+          </div>
+        )}
+      </div>
     </div>
-  )
+  );
 }
-
