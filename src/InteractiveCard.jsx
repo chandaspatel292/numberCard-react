@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import EdiText from 'react-editext';
 import ReactQuill from "react-quill";
@@ -12,13 +12,13 @@ Quill.register(Font, true);
 const initialCard = {
   card_num: 123,
   card_title: "Lorem ipsum",
-  card_description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut. Etiam imperdiet fermentum consectetur. Vivamus sagittis, enim quis ullamcorper iaculis",
+  card_description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut.",
   card_button: "Save",
   card_delete: true,
   card_id: 1,
 };
 
-export default function App() {
+export default function InteractiveCard() {
   const [cardDetails, setCardDetails] = useState([initialCard]);
 
   const handleAddCard = () => {
@@ -55,6 +55,11 @@ export default function App() {
                     type="text"
                     value={item.card_title}
                     onSave={(value) => handleEditCard(item.card_id, 'card_title', value)}
+                    className="custom-edit-text"
+                    viewProps={{
+                      className: 'my-react-header',
+                      style: { borderRadius: 3 }
+                    }}
                   />
                 </h5>
                 <ReactQuill
