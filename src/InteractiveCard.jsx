@@ -1,19 +1,16 @@
-import { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
+import React, { useState } from 'react';
 import EdiText from 'react-editext';
-import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
-
-const Quill = ReactQuill.Quill;
-var Font = Quill.import("formats/font");
-Font.whitelist = ["Poppins", "Montserrat", "Lato", "Mulish"];
-Quill.register(Font, true);
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.bubble.css'; // Import the bubble theme CSS
+import { Button, Card, CardContent, Container, Grid, Typography } from '@mui/material';
+import './App.css';
 
 const initialCard = {
   card_num: 123,
-  card_title: "Lorem ipsum",
-  card_description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut.",
-  card_button: "Save",
+  card_title: 'Lorem ipsum',
+  card_description:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut.',
+  card_button: 'Save',
   card_delete: true,
   card_id: 1,
 };
@@ -44,43 +41,69 @@ export default function InteractiveCard() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row">
+    <Container className="body" style={{ backgroundColor: "#cfcfcf" }} mt={5}>
+      <Grid container spacing={3}>
         {cardDetails.map((item) => (
-          <div key={item.card_id} className="col-md-4 mb-3">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">
+          <Grid key={item.card_id} item xs={12} sm={6} md={4}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5" component="div">
                   <EdiText
                     type="text"
                     value={item.card_title}
-                    onSave={(value) => handleEditCard(item.card_id, 'card_title', value)}
+                    onSave={(value) =>
+                      handleEditCard(item.card_id, 'card_title', value)
+                    }
+                    // Use the className prop to apply custom styles
                     className="custom-edit-text"
-                    viewProps={{
-                      className: 'my-react-header',
-                      style: { borderRadius: 3 }
-                    }}
+                    // You can also use inputProps to apply styles to the input field
+                    inputProps={{ style: { background: '#1d2225', color: '#f4c361', fontWeight: 'bold', borderRadius: '5px' } }}
                   />
-                </h5>
-                <ReactQuill
-                  value={item.card_description}
-                  onChange={(value) => handleEditCard(item.card_id, 'card_description', value)}
-                />
+                </Typography>
+                <div className="quill-overlay-container">
+                  <ReactQuill
+                    value={item.card_description}
+                    onChange={(value) =>
+                      handleEditCard(item.card_id, 'card_description', value)
+                    }
+                    theme="bubble"
+                  />
+                </div>
                 {item.card_delete ? (
-                  <button className="btn btn-danger" onClick={() => handleCardDelete(item.card_id)}>Delete</button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleCardDelete(item.card_id)}
+                  >
+                    Delete
+                  </Button>
                 ) : (
-                  <button className="btn btn-success" onClick={() => handleEditCard(item.card_id, 'card_delete', true)}>Undo Delete</button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() =>
+                      handleEditCard(item.card_id, 'card_delete', true)
+                    }
+                  >
+                    Undo Delete
+                  </Button>
                 )}
-              </div>
-            </div>
-          </div>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
         {cardDetails.length < 9 && (
-          <div className="col-md-4 mb-3">
-            <button className="btn btn-primary" onClick={handleAddCard}>Add Card</button>
-          </div>
+          <Grid item xs={12} sm={6} md={4}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddCard}
+            >
+              Add Card
+            </Button>
+          </Grid>
         )}
-      </div>
-    </div>
+      </Grid>
+    </Container>
   );
 }

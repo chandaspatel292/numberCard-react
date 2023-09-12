@@ -1,0 +1,34 @@
+body {
+  background-color: #cfcfcf;
+}
+button[editext="cancel-button"] {
+  &:hover {
+    background: crimson;
+    color: #fff;
+  }
+}
+button[editext="edit-button"] {
+  color: #fff;
+  background-color: grey;
+}
+
+div[editext="view-container"] {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 5px;
+  color: black;
+}
+
+div[editext="validation-container"] {
+  color: #d3d3d3;
+  text-decoration: underline;
+}
+
+input,
+textarea {
+  /** or input[editext="input"] {} */
+  background: #1d2225;
+  color: #f4c361;
+  font-weight: bold;
+  border-radius: 5px;
+}
