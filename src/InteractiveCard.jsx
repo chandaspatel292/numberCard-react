@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import EdiText from 'react-editext';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css'; // Import the bubble theme CSS
+import 'react-quill/dist/quill.snow.css'; // Import the bubble theme CSS
 import { Button, Card, CardContent, Container, Grid, Typography } from '@mui/material';
-import './App.css';
+//import './App.css';
 
 const initialCard = {
   card_num: 123,
@@ -28,10 +28,16 @@ export default function InteractiveCard() {
     }
   };
 
+  // Delete a card by ID
   const handleCardDelete = (id) => {
-    const updatedCards = cardDetails.filter((card) => card.card_id !== id);
-    setCardDetails(updatedCards);
+    const updatedCards = [...cardDetails];
+    const index = updatedCards.findIndex((card) => card.card_id === id);
+    if (index !== -1) {
+      updatedCards.splice(index, 1);
+      setCardDetails(updatedCards);
+    }
   };
+
 
   const handleEditCard = (id, field, value) => {
     const updatedCards = cardDetails.map((card) =>
@@ -41,7 +47,7 @@ export default function InteractiveCard() {
   };
 
   return (
-    <Container className="body" style={{ backgroundColor: "#cfcfcf" }} mt={5}>
+    <Container className="body" mt={5}>
       <Grid container spacing={3}>
         {cardDetails.map((item) => (
           <Grid key={item.card_id} item xs={12} sm={6} md={4}>
@@ -66,7 +72,7 @@ export default function InteractiveCard() {
                     onChange={(value) =>
                       handleEditCard(item.card_id, 'card_description', value)
                     }
-                    theme="bubble"
+
                   />
                 </div>
                 {item.card_delete ? (
