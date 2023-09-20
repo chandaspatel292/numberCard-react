@@ -5,6 +5,13 @@ import 'react-quill/dist/quill.snow.css'; // Import the bubble theme CSS
 import { Button, Card, CardContent, Container, Grid, Typography } from '@mui/material';
 //import './App.css';
 
+const Quill = ReactQuill.Quill;
+var Font = Quill.import("formats/font");
+//Font.whitelist = ["Sans-Serif","Monospace","Serif", "Poppins", "Montserrat", "Lato", "Mulish"];
+Font.whitelist = ["Poppins", "Montserrat", "Lato", "Mulish"];
+Quill.register(Font, true);
+
+
 const initialCard = {
   card_num: 123,
   card_title: 'Lorem ipsum',
@@ -46,6 +53,17 @@ export default function InteractiveCard() {
     setCardDetails(updatedCards);
   };
 
+  const modules = {
+    toolbar:[
+      //[{ font: Font.whitelist }],
+      [{ size: ["small", false, "large", "huge"] }],
+  
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }], 
+      [{ align: [] }],
+    ]
+  }
+
   return (
     <Container className="body" mt={5}>
       <Grid container spacing={3}>
@@ -72,6 +90,7 @@ export default function InteractiveCard() {
                     onChange={(value) =>
                       handleEditCard(item.card_id, 'card_description', value)
                     }
+                    modules ={modules}
 
                   />
                 </div>
