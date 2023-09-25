@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
-import EdiText from 'react-editext';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import the bubble theme CSS
-import { Button, Card, CardContent, Container, Grid, Typography } from '@mui/material';
+import React, { useState } from "react";
+import EdiText from "react-editext";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the bubble theme CSS
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 //import './App.css';
 
 const Quill = ReactQuill.Quill;
@@ -11,13 +18,12 @@ var Font = Quill.import("formats/font");
 Font.whitelist = ["Poppins", "Montserrat", "Lato", "Mulish"];
 Quill.register(Font, true);
 
-
 const initialCard = {
   card_num: 123,
-  card_title: 'Lorem ipsum',
+  card_title: "Lorem ipsum",
   card_description:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut.',
-  card_button: 'Save',
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In posuere venenatis ex, et sagittis massa mollis ut.",
+  card_button: "Save",
   card_delete: true,
   card_id: 1,
 };
@@ -45,7 +51,6 @@ export default function InteractiveCard() {
     }
   };
 
-
   const handleEditCard = (id, field, value) => {
     const updatedCards = cardDetails.map((card) =>
       card.card_id === id ? { ...card, [field]: value } : card
@@ -54,15 +59,15 @@ export default function InteractiveCard() {
   };
 
   const modules = {
-    toolbar:[
+    toolbar: [
       //[{ font: Font.whitelist }],
       [{ size: ["small", false, "large", "huge"] }],
-  
+
       ["bold", "italic", "underline", "strike"],
-      [{ color: [] }, { background: [] }], 
+      [{ color: [] }, { background: [] }],
       [{ align: [] }],
-    ]
-  }
+    ],
+  };
 
   return (
     <Container className="body" mt={5}>
@@ -76,22 +81,28 @@ export default function InteractiveCard() {
                     type="text"
                     value={item.card_title}
                     onSave={(value) =>
-                      handleEditCard(item.card_id, 'card_title', value)
+                      handleEditCard(item.card_id, "card_title", value)
                     }
                     // Use the className prop to apply custom styles
                     className="custom-edit-text"
                     // You can also use inputProps to apply styles to the input field
-                    inputProps={{ style: { background: '#1d2225', color: '#f4c361', fontWeight: 'bold', borderRadius: '5px' } }}
+                    inputProps={{
+                      style: {
+                        background: "#1d2225",
+                        color: "#f4c361",
+                        fontWeight: "bold",
+                        borderRadius: "5px",
+                      },
+                    }}
                   />
                 </Typography>
                 <div className="quill-overlay-container">
                   <ReactQuill
                     value={item.card_description}
                     onChange={(value) =>
-                      handleEditCard(item.card_id, 'card_description', value)
+                      handleEditCard(item.card_id, "card_description", value)
                     }
-                    modules ={modules}
-
+                    modules={modules}
                   />
                 </div>
                 {item.card_delete ? (
@@ -107,7 +118,7 @@ export default function InteractiveCard() {
                     variant="contained"
                     color="success"
                     onClick={() =>
-                      handleEditCard(item.card_id, 'card_delete', true)
+                      handleEditCard(item.card_id, "card_delete", true)
                     }
                   >
                     Undo Delete
@@ -119,11 +130,7 @@ export default function InteractiveCard() {
         ))}
         {cardDetails.length < 9 && (
           <Grid item xs={12} sm={6} md={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddCard}
-            >
+            <Button variant="contained" color="primary" onClick={handleAddCard}>
               Add Card
             </Button>
           </Grid>
