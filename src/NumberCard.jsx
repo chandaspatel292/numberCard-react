@@ -164,7 +164,7 @@ const NumberCard = () => {
                           minWidth: "60px",
                           marginTop: "8px",
                           marginBottom: "8px",
-                          cursor: "pointer",
+                          cursor: "text",
                         }}
                       />
                     </div>
@@ -218,7 +218,7 @@ const NumberCard = () => {
                           minHeight: "50px",
                           marginTop: "16px",
                           marginBottom: "16px",
-                          cursor: "pointer",
+                          cursor: "text",
                         }}
                       />
                     </div>

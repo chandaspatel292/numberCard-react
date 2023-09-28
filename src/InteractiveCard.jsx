@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EdiText from "react-editext";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Import the bubble theme CSS
+import "react-quill/dist/quill.snow.css";
 import {
   Button,
   Card,
