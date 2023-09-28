@@ -65,9 +65,6 @@ const React_Card = () => {
     updatedValues[id] = value;
     setTitleValues(updatedValues);
 
-    console.log(value);
-    console.log(id);
-
     // Also update the corresponding cardDetails
     const updatedCards = [...cardDetails];
     updatedCards[id].card_title = value;
@@ -94,6 +91,11 @@ const React_Card = () => {
     ],
   };
 
+  const showDetails = () => {
+    var temparray = [...cardDetails];
+    console.log(temparray);
+  };
+
   const formats = [
     /* "align", */
     /* "background", */
@@ -107,25 +109,8 @@ const React_Card = () => {
     "underline",
   ];
 
-  const saveCardDetails = () => {
-    // Assuming you have a server running at http://localhost:3001 (adjust the URL as needed)
-    const apiUrl = "http://localhost:3001/saveData";
-
-    // Make an HTTP POST request to the server to save cardDetails
-    axios
-      .post(apiUrl, cardDetails)
-      .then((response) => {
-        console.log("Data saved successfully");
-        // Optionally, you can add code here to handle the response from the server
-      })
-      .catch((error) => {
-        console.error("Error saving data:", error);
-        // Optionally, you can add code here to handle errors
-      });
-  };
-
   return (
-    <div>
+    <>
       <Grid container spacing={3}>
         {cardDetails.map((item, ind) => (
           <Grid key={item.card_id} item xs={12} sm={6} md={4}>
@@ -208,12 +193,12 @@ const React_Card = () => {
       <Button
         color="primary"
         variant="contained"
-        onClick={saveCardDetails} // Attach the saveCardDetails function to the button's onClick event
+        onClick={showDetails} // Attach the saveCardDetails function to the button's onClick event
         style={{ marginTop: "16px" }}
       >
         Save
       </Button>
-    </div>
+    </>
   );
 };
 
