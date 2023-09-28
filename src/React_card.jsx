@@ -14,7 +14,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.bubble.css";
+import "react-quill/dist/quill.snow.css";
 
 const InitialCardDetails = {
   card_id: 1,
@@ -26,6 +26,12 @@ const InitialCardDetails = {
 
 const React_Card = () => {
   const [cardDetails, setCardDetails] = useState([InitialCardDetails]);
+  const [titleValues, setTitleValues] = useState([
+    InitialCardDetails.card_title,
+  ]);
+  const [descriptionValues, setDescriptionValues] = useState([
+    InitialCardDetails.card_description,
+  ]);
 
   const handleAddCard = () => {
     const newCard = {
@@ -36,11 +42,15 @@ const React_Card = () => {
       editing: true,
     };
     setCardDetails([...cardDetails, newCard]);
+    setTitleValues([...titleValues, newCard.card_title]);
+    setDescriptionValues([...descriptionValues, newCard.card_description]);
   };
 
   const handleCardDelete = (id) => {
     const updatedCards = cardDetails.filter((item, index) => index !== id);
     setCardDetails(updatedCards);
+    setTitleValues((prev) => prev.filter((_, index) => index !== id));
+    setDescriptionValues((prev) => prev.filter((_, index) => index !== id));
   };
 
   const handleToggleEditing = (id) => {
@@ -51,98 +61,159 @@ const React_Card = () => {
   };
 
   const handleTitleChange = (id, value) => {
-    const updatedCards = cardDetails.map((item, index) =>
-      index === id ? { ...item, card_title: value } : item
-    );
+    const updatedValues = [...titleValues];
+    updatedValues[id] = value;
+    setTitleValues(updatedValues);
+
+    console.log(value);
+    console.log(id);
+
+    // Also update the corresponding cardDetails
+    const updatedCards = [...cardDetails];
+    updatedCards[id].card_title = value;
     setCardDetails(updatedCards);
   };
 
   const handleDescriptionChange = (id, value) => {
-    const updatedCards = cardDetails.map((item, index) =>
-      index === id ? { ...item, card_description: value } : item
-    );
+    const updatedValues = [...descriptionValues];
+    updatedValues[id] = value;
+    setDescriptionValues(updatedValues);
+
+    // Also update the corresponding cardDetails
+    const updatedCards = [...cardDetails];
+    updatedCards[id].card_description = value;
     setCardDetails(updatedCards);
   };
 
+  const modules = {
+    toolbar: [
+      /* [{ size: [] } { font: [] }], */
+      ["bold", "italic", "underline" /* "strike" */],
+      [{ color: [] } /* , { background: [] }, { align: [] } */],
+      ["link"],
+    ],
+  };
+
+  const formats = [
+    /* "align", */
+    /* "background", */
+    "bold",
+    "color",
+    "font",
+    /* "strike", */
+    "italic",
+    "link",
+    "size",
+    "underline",
+  ];
+
+  const saveCardDetails = () => {
+    // Assuming you have a server running at http://localhost:3001 (adjust the URL as needed)
+    const apiUrl = "http://localhost:3001/saveData";
+
+    // Make an HTTP POST request to the server to save cardDetails
+    axios
+      .post(apiUrl, cardDetails)
+      .then((response) => {
+        console.log("Data saved successfully");
+        // Optionally, you can add code here to handle the response from the server
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+        // Optionally, you can add code here to handle errors
+      });
+  };
+
   return (
-    <Grid container spacing={3}>
-      {cardDetails.map((item, ind) => (
-        <Grid key={item.card_id} item xs={12} sm={6} md={4}>
-          <Card>
-            <CardContent>
-              {item.editing ? (
-                <div>
-                  <TextField
-                    label="Title"
-                    fullWidth
-                    value={item.card_title}
-                    onChange={(e) => handleTitleChange(ind, e.target.value)}
-                    style={{ margin: "4px" }}
-                  />
-                  <TextField
-                    label="Description"
-                    fullWidth
-                    value={item.card_description}
-                    onChange={(e) =>
-                      handleDescriptionChange(ind, e.target.value)
-                    }
-                    style={{ margin: "4px" }}
-                  />
-                </div>
-              ) : (
-                <>
-                  <Typography
-                    variant="h3"
-                    component="div"
-                    style={{ minWidth: "300px" }}
-                  >
-                    {item.card_title}
-                  </Typography>
-                  <br />
-                  <Typography /* variant="h6" */ component="div">
-                    {item.card_description}
-                  </Typography>
-                </>
-              )}
-            </CardContent>
-            <CardActions>
-              {item.editing ? (
-                <IconButton onClick={() => handleToggleEditing(ind)}>
-                  <SaveIcon />
+    <div>
+      <Grid container spacing={3}>
+        {cardDetails.map((item, ind) => (
+          <Grid key={item.card_id} item xs={12} sm={6} md={4}>
+            <Card>
+              <CardContent>
+                {item.editing ? (
+                  <div>
+                    <ReactQuill
+                      key={`title-${ind}`}
+                      theme="snow" // Use a unique key for each ReactQuill component
+                      value={item.card_title}
+                      onChange={(content) => handleTitleChange(ind, content)}
+                      modules={modules}
+                      formats={formats}
+                      style={{ margin: "4px", width: "100%" }}
+                    />
+                    <ReactQuill
+                      key={`description-${ind}`} // Use a unique key for each ReactQuill component
+                      value={item.card_description}
+                      onChange={(value) => handleDescriptionChange(ind, value)}
+                      modules={modules}
+                      formats={formats}
+                      style={{ margin: "4px", width: "100%" }}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.card_title,
+                      }}
+                    />
+                    <br />
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.card_description,
+                      }}
+                    />
+                  </>
+                )}
+              </CardContent>
+              <CardActions>
+                {item.editing ? (
+                  <IconButton onClick={() => handleToggleEditing(ind)}>
+                    <SaveIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton onClick={() => handleToggleEditing(ind)}>
+                    <EditIcon />
+                  </IconButton>
+                )}
+                <IconButton
+                  className="card-delete"
+                  onClick={() => handleCardDelete(ind)}
+                >
+                  <DeleteIcon />
                 </IconButton>
-              ) : (
-                <IconButton onClick={() => handleToggleEditing(ind)}>
-                  <EditIcon />
-                </IconButton>
-              )}
-              <IconButton
-                className="card-delete"
-                onClick={() => handleCardDelete(ind)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </CardActions>
-          </Card>
-        </Grid>
-      ))}
-      {cardDetails.length < 9 ? (
-        <Grid item xs={4}>
-          <Card
-            sx={{
-              minHeight: 300,
-              minWidth: 300,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-            onClick={handleAddCard}
-          >
-            <AddBoxIcon fontSize="large" />
-          </Card>
-        </Grid>
-      ) : null}
-    </Grid>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+        {cardDetails.length < 9 ? (
+          <Grid item xs={4}>
+            <Card
+              sx={{
+                minHeight: 300,
+                minWidth: 300,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+              onClick={handleAddCard}
+            >
+              <AddBoxIcon fontSize="large" />
+            </Card>
+          </Grid>
+        ) : null}
+      </Grid>
+      <Button
+        color="primary"
+        variant="contained"
+        onClick={saveCardDetails} // Attach the saveCardDetails function to the button's onClick event
+        style={{ marginTop: "16px" }}
+      >
+        Save
+      </Button>
+    </div>
   );
 };
 
