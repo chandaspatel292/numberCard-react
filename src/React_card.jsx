@@ -111,7 +111,7 @@ const React_Card = () => {
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify="center" margin={"8px"}>
         {cardDetails.map((item, ind) => (
           <Grid key={item.card_id} item xs={12} sm={6} md={4}>
             <Card>
