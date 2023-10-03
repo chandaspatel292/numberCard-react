@@ -177,12 +177,18 @@ const React_Card = () => {
 
   return (
     <div style={{ maxWidth: "1500px" }}>
-      <Grid container spacing={3} justify="center" margin={"8px"}>
+      <Grid container spacing={3} justify="center">
         {cardDetails.map((item, ind) => (
-          <Grid key={item.card_id} item xs={12} sm={6} md={4}>
-            <Card>
+          <Grid key={item.card_id} item xs={4} sm={6} md={4}>
+            <Card sx={{ width: "100%", minHeight: 300 }}>
               <CardContent>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <div
                     onMouseOver={() => handleTitleMouseOver(ind)}
                     onMouseOut={handleTitleMouseOut}
@@ -221,7 +227,13 @@ const React_Card = () => {
                   )}
                 </div>
                 <br />
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <div
                     onMouseOver={() => handleDescriptionMouseOver(ind)}
                     onMouseOut={handleDescriptionMouseOut}
@@ -279,6 +291,7 @@ const React_Card = () => {
           <Grid item xs={4}>
             <Card
               sx={{
+                width: "100%",
                 minHeight: 300,
                 minWidth: 300,
                 display: "flex",
@@ -297,7 +310,7 @@ const React_Card = () => {
         color="primary"
         variant="contained"
         onClick={showDetails} // Attach the saveCardDetails function to the button's onClick event
-        style={{ marginTop: "16px" }}
+        style={{ margin: "16px" }}
       >
         Save
       </Button>
