@@ -109,6 +109,26 @@ const React_Card = () => {
     "underline",
   ];
 
+  const [hoveredTitle, setHoveredTitle] = useState(null);
+  const [hoveredDescription, setHoveredDescription] = useState(null);
+
+  // Functions to handle hover events for title and description
+  const handleTitleMouseOver = (id) => {
+    setHoveredTitle(id);
+  };
+
+  const handleTitleMouseOut = () => {
+    setHoveredTitle(null);
+  };
+
+  const handleDescriptionMouseOver = (id) => {
+    setHoveredDescription(id);
+  };
+
+  const handleDescriptionMouseOut = () => {
+    setHoveredDescription(null);
+  };
+
   return (
     <div style={{ maxWidth: "1500px" }}>
       <Grid container spacing={3} justify="center" margin={"8px"}>
@@ -116,52 +136,63 @@ const React_Card = () => {
           <Grid key={item.card_id} item xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
-                {item.editing ? (
-                  <div>
-                    <ReactQuill
-                      key={`title-${ind}`}
-                      theme="snow"
-                      value={item.card_title}
-                      onChange={(content) => handleTitleChange(ind, content)}
-                      modules={modules}
-                      formats={formats}
-                      style={{ margin: "4px", width: "100%" }}
-                    />
-                    <ReactQuill
-                      key={`description-${ind}`} // Use a unique key for each ReactQuill component
-                      value={item.card_description}
-                      onChange={(value) => handleDescriptionChange(ind, value)}
-                      modules={modules}
-                      formats={formats}
-                      style={{ margin: "4px", width: "100%" }}
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.card_title,
-                      }}
-                    />
-                    <br />
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.card_description,
-                      }}
-                    />
-                  </>
-                )}
+                <div
+                  onMouseOver={() => handleTitleMouseOver(ind)}
+                  onMouseOut={handleTitleMouseOut}
+                >
+                  {
+                    /* item.editing || */ ind === hoveredTitle ? (
+                      <ReactQuill
+                        key={`title-${ind}`}
+                        theme="snow"
+                        value={titleValues[ind]}
+                        onChange={(content) => handleTitleChange(ind, content)}
+                        modules={modules}
+                        formats={formats}
+                        style={{ margin: "4px", width: "100%" }}
+                      />
+                    ) : (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: titleValues[ind],
+                        }}
+                      />
+                    )
+                  }
+                </div>
+                <br />
+                <div
+                  onMouseOver={() => handleDescriptionMouseOver(ind)}
+                  onMouseOut={handleDescriptionMouseOut}
+                >
+                  {
+                    /* item.editing || */ ind === hoveredDescription ? (
+                      <ReactQuill
+                        key={`description-${ind}`}
+                        value={descriptionValues[ind]}
+                        onChange={(value) =>
+                          handleDescriptionChange(ind, value)
+                        }
+                        modules={modules}
+                        formats={formats}
+                        style={{ margin: "4px", width: "100%" }}
+                      />
+                    ) : (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: descriptionValues[ind],
+                        }}
+                      />
+                    )
+                  }
+                </div>
               </CardContent>
               <CardActions>
-                {item.editing ? (
+                {/* {item.editing ? (
                   <IconButton onClick={() => handleToggleEditing(ind)}>
                     <SaveIcon />
                   </IconButton>
-                ) : (
-                  <IconButton onClick={() => handleToggleEditing(ind)}>
-                    <EditIcon />
-                  </IconButton>
-                )}
+                ) : null} */}
                 <IconButton
                   className="card-delete"
                   onClick={() => handleCardDelete(ind)}
