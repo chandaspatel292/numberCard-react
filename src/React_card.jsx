@@ -84,6 +84,27 @@ const React_Card = () => {
     updatedCards[id].card_description = value;
     setCardDetails(updatedCards);
   };
+  const handleTitleKeyDown = (id, e) => {
+    // Get the current content of the editor
+    const currentContent = titleValues[id];
+
+    // Check if the pressed key is a number or a control key
+    if (
+      (e.key >= "0" && e.key <= "9") ||
+      ["Backspace", "ArrowLeft", "ArrowRight", "Control", "Shift"].includes(
+        e.key
+      )
+    ) {
+      // Allow the input
+      return;
+    } else {
+      // Prevent any other keypress and restore the previous content
+      e.preventDefault();
+      const updatedValues = [...titleValues];
+      updatedValues[id] = currentContent;
+      setTitleValues(updatedValues);
+    }
+  };
 
   var toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -194,6 +215,7 @@ const React_Card = () => {
                   <div
                     onMouseOver={() => handleTitleMouseOver(ind)}
                     onMouseOut={handleTitleMouseOut}
+                    onKeyDown={(e) => handleTitleKeyDown(ind, e)}
                   >
                     {
                       /* item.editing || */ ind === hoveredTitle ? (
@@ -204,6 +226,7 @@ const React_Card = () => {
                           onChange={(content) =>
                             handleTitleChange(ind, content)
                           }
+                          placeholder="Enter Number here"
                           modules={modules}
                           style={{ margin: "4px", width: "100%" }}
                         />
@@ -248,6 +271,7 @@ const React_Card = () => {
                           onChange={(value) =>
                             handleDescriptionChange(ind, value)
                           }
+                          placeholder="Enter description here"
                           modules={modules}
                           style={{ margin: "4px", width: "100%" }}
                         />
