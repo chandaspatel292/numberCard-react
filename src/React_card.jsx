@@ -110,11 +110,11 @@ const React_Card = () => {
   ];
 
   return (
-    <div style={{ maxWidth: "1500px" }}>
+    <>
       <Grid container spacing={3} justify="center" margin={"8px"}>
         {cardDetails.map((item, ind) => (
           <Grid key={item.card_id} item xs={12} sm={6} md={4}>
-            <Card style={{ minWidth: "300px" }}>
+            <Card>
               <CardContent>
                 {item.editing ? (
                   <div>
@@ -138,27 +138,17 @@ const React_Card = () => {
                   </div>
                 ) : (
                   <>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: item.card_title,
-                        }}
-                      />
-                      <IconButton onClick={() => handleToggleEditing(ind)}>
-                        <EditIcon />
-                      </IconButton>
-                    </div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.card_title,
+                      }}
+                    />
                     <br />
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: item.card_description,
-                        }}
-                      />
-                      <IconButton onClick={() => handleToggleEditing(ind)}>
-                        <EditIcon />
-                      </IconButton>
-                    </div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.card_description,
+                      }}
+                    />
                   </>
                 )}
               </CardContent>
@@ -167,7 +157,11 @@ const React_Card = () => {
                   <IconButton onClick={() => handleToggleEditing(ind)}>
                     <SaveIcon />
                   </IconButton>
-                ) : null}
+                ) : (
+                  <IconButton onClick={() => handleToggleEditing(ind)}>
+                    <EditIcon />
+                  </IconButton>
+                )}
                 <IconButton
                   className="card-delete"
                   onClick={() => handleCardDelete(ind)}
@@ -204,7 +198,7 @@ const React_Card = () => {
       >
         Save
       </Button>
-    </div>
+    </>
   );
 };
 
