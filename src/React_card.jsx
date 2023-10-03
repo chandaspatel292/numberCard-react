@@ -12,6 +12,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import ReactQuill from "react-quill";
@@ -141,6 +142,16 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
+  const handleAddTitle = (id) => {
+    const updatedValues = [...titleValues];
+    updatedValues[id] = "Untitled";
+    setTitleValues(updatedValues);
+
+    const updatedCards = [...cardDetails];
+    updatedCards[id].card_title = "Untitled";
+    setCardDetails(updatedCards);
+  };
+
   // Function to delete the description of a card
   const handleDeleteDescription = (id) => {
     const updatedValues = [...descriptionValues];
@@ -153,6 +164,16 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
+  const handleAddDescription = (id) => {
+    const updatedValues = [...descriptionValues];
+    updatedValues[id] = "The card description";
+    setDescriptionValues(updatedValues);
+
+    const updatedCards = [...cardDetails];
+    updatedCards[id].card_description = "The card description";
+    setCardDetails(updatedCards);
+  };
+
   return (
     <div style={{ maxWidth: "1500px" }}>
       <Grid container spacing={3} justify="center" margin={"8px"}>
@@ -160,69 +181,83 @@ const React_Card = () => {
           <Grid key={item.card_id} item xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
-                <div
-                  onMouseOver={() => handleTitleMouseOver(ind)}
-                  onMouseOut={handleTitleMouseOut}
-                >
-                  {
-                    /* item.editing || */ ind === hoveredTitle ? (
-                      <ReactQuill
-                        key={`title-${ind}`}
-                        theme="snow"
-                        value={titleValues[ind]}
-                        onChange={(content) => handleTitleChange(ind, content)}
-                        modules={modules}
-                        formats={formats}
-                        style={{ margin: "4px", width: "100%" }}
-                      />
-                    ) : (
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    onMouseOver={() => handleTitleMouseOver(ind)}
+                    onMouseOut={handleTitleMouseOut}
+                  >
+                    {
+                      /* item.editing || */ ind === hoveredTitle ? (
+                        <ReactQuill
+                          key={`title-${ind}`}
+                          theme="snow"
+                          value={titleValues[ind]}
+                          onChange={(content) =>
+                            handleTitleChange(ind, content)
+                          }
+                          modules={modules}
+                          formats={formats}
+                          style={{ margin: "4px", width: "100%" }}
+                        />
+                      ) : (
                         <div
                           dangerouslySetInnerHTML={{
                             __html: titleValues[ind],
                           }}
                         />
-                        <IconButton
-                          onClick={() => handleDeleteTitle(ind)} // Delete the title
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </div>
-                    )
-                  }
+                      )
+                    }
+                  </div>
+                  {titleValues[ind] !== "" ? (
+                    <IconButton
+                      onClick={() => handleDeleteTitle(ind)} // Delete the title
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton onClick={() => handleAddTitle(ind)}>
+                      <AddIcon />
+                    </IconButton>
+                  )}
                 </div>
                 <br />
-                <div
-                  onMouseOver={() => handleDescriptionMouseOver(ind)}
-                  onMouseOut={handleDescriptionMouseOut}
-                >
-                  {
-                    /* item.editing || */ ind === hoveredDescription ? (
-                      <ReactQuill
-                        key={`description-${ind}`}
-                        value={descriptionValues[ind]}
-                        onChange={(value) =>
-                          handleDescriptionChange(ind, value)
-                        }
-                        modules={modules}
-                        formats={formats}
-                        style={{ margin: "4px", width: "100%" }}
-                      />
-                    ) : (
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    onMouseOver={() => handleDescriptionMouseOver(ind)}
+                    onMouseOut={handleDescriptionMouseOut}
+                  >
+                    {
+                      /* item.editing || */ ind === hoveredDescription ? (
+                        <ReactQuill
+                          key={`description-${ind}`}
+                          value={descriptionValues[ind]}
+                          onChange={(value) =>
+                            handleDescriptionChange(ind, value)
+                          }
+                          modules={modules}
+                          formats={formats}
+                          style={{ margin: "4px", width: "100%" }}
+                        />
+                      ) : (
                         <div
                           dangerouslySetInnerHTML={{
                             __html: descriptionValues[ind],
                           }}
                         />
-                        <IconButton
-                          onClick={() => handleDeleteDescription(ind)} // Delete the description
-                        >
-                          <ClearIcon />
-                        </IconButton>
-                      </div>
-                    )
-                  }
+                      )
+                    }
+                  </div>
+                  {descriptionValues[ind] !== "" ? (
+                    <IconButton
+                      onClick={() => handleDeleteDescription(ind)} // Delete the description
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton onClick={() => handleAddDescription(ind)}>
+                      <AddIcon />
+                    </IconButton>
+                  )}
                 </div>
               </CardContent>
               <CardActions>
