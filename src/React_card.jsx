@@ -9,6 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import EditIcon from "@mui/icons-material/Edit";
@@ -129,6 +130,29 @@ const React_Card = () => {
     setHoveredDescription(null);
   };
 
+  const handleDeleteTitle = (id) => {
+    const updatedValues = [...titleValues];
+    updatedValues[id] = ""; // Clear the title
+    setTitleValues(updatedValues);
+
+    // Also update the corresponding cardDetails
+    const updatedCards = [...cardDetails];
+    updatedCards[id].card_title = "";
+    setCardDetails(updatedCards);
+  };
+
+  // Function to delete the description of a card
+  const handleDeleteDescription = (id) => {
+    const updatedValues = [...descriptionValues];
+    updatedValues[id] = ""; // Clear the description
+    setDescriptionValues(updatedValues);
+
+    // Also update the corresponding cardDetails
+    const updatedCards = [...cardDetails];
+    updatedCards[id].card_description = "";
+    setCardDetails(updatedCards);
+  };
+
   return (
     <div style={{ maxWidth: "1500px" }}>
       <Grid container spacing={3} justify="center" margin={"8px"}>
@@ -152,11 +176,18 @@ const React_Card = () => {
                         style={{ margin: "4px", width: "100%" }}
                       />
                     ) : (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: titleValues[ind],
-                        }}
-                      />
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: titleValues[ind],
+                          }}
+                        />
+                        <IconButton
+                          onClick={() => handleDeleteTitle(ind)} // Delete the title
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </div>
                     )
                   }
                 </div>
@@ -178,11 +209,18 @@ const React_Card = () => {
                         style={{ margin: "4px", width: "100%" }}
                       />
                     ) : (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: descriptionValues[ind],
-                        }}
-                      />
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: descriptionValues[ind],
+                          }}
+                        />
+                        <IconButton
+                          onClick={() => handleDeleteDescription(ind)} // Delete the description
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </div>
                     )
                   }
                 </div>
@@ -197,7 +235,7 @@ const React_Card = () => {
                   className="card-delete"
                   onClick={() => handleCardDelete(ind)}
                 >
-                  <DeleteIcon />
+                  <DeleteIcon color="red" />
                 </IconButton>
               </CardActions>
             </Card>
