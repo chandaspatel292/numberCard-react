@@ -1,3 +1,4 @@
+// Import necessary dependencies and components from Material-UI and React-Quill
 import React, { useState } from "react";
 import {
   Button,
@@ -7,18 +8,15 @@ import {
   Container,
   Grid,
   IconButton,
-  TextField,
-  Typography,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+// Define initial card details for a single card
 const InitialCardDetails = {
   card_id: 1,
   card_title: "000",
@@ -28,6 +26,7 @@ const InitialCardDetails = {
 };
 
 const React_Card = () => {
+  // State variables for card details, title values, and description values
   const [cardDetails, setCardDetails] = useState([InitialCardDetails]);
   const [titleValues, setTitleValues] = useState([
     InitialCardDetails.card_title,
@@ -36,6 +35,7 @@ const React_Card = () => {
     InitialCardDetails.card_description,
   ]);
 
+  // Function to add a new card
   const handleAddCard = () => {
     const newCard = {
       card_id: cardDetails.length + 1,
@@ -49,6 +49,7 @@ const React_Card = () => {
     setDescriptionValues([...descriptionValues, newCard.card_description]);
   };
 
+  // Function to delete a card by its ID
   const handleCardDelete = (id) => {
     const updatedCards = cardDetails.filter((item, index) => index !== id);
     setCardDetails(updatedCards);
@@ -56,6 +57,7 @@ const React_Card = () => {
     setDescriptionValues((prev) => prev.filter((_, index) => index !== id));
   };
 
+  // Function to toggle editing mode for a card by its ID
   const handleToggleEditing = (id) => {
     const updatedCards = cardDetails.map((item, index) =>
       index === id ? { ...item, editing: !item.editing } : item
@@ -63,6 +65,7 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
+  // Function to handle title change for a card by its ID
   const handleTitleChange = (id, value) => {
     const updatedValues = [...titleValues];
     updatedValues[id] = value;
@@ -74,6 +77,7 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
+  // Function to handle description change for a card by its ID
   const handleDescriptionChange = (id, value) => {
     const updatedValues = [...descriptionValues];
     updatedValues[id] = value;
@@ -84,6 +88,8 @@ const React_Card = () => {
     updatedCards[id].card_description = value;
     setCardDetails(updatedCards);
   };
+
+  // Function to handle key press events for title input
   const handleTitleKeyDown = (id, e) => {
     // Get the current content of the editor
     const currentContent = titleValues[id];
@@ -106,22 +112,14 @@ const React_Card = () => {
     }
   };
 
+  // Define toolbar options for the ReactQuill editor
   var toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
-    [/* "blockquote", */ /* "code-block", */ "link"],
-
-    /* [{ header: 1 }, { header: 2 }], */ // custom button values
-    /* [{ list: "ordered" }, { list: "bullet" }], */
-    [{ script: "sub" }, { script: "super" }], // superscript/subscript
-    /* [{ indent: "-1" }, { indent: "+1" }], */ // outdent/indent
-    /* [{ direction: "rtl" }], */ // text direction
-
-    /* [{ size: ["small", false, "large", "huge"] }],  */ // custom dropdown
+    ["link"],
+    [{ script: "sub" }, { script: "super" }],
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ color: [] }, { background: [] }],
     [{ align: [] }],
-
     ["clean"], // remove formatting button
   ];
 
@@ -129,11 +127,13 @@ const React_Card = () => {
     toolbar: toolbarOptions,
   };
 
+  // Function to display card details in the console
   const showDetails = () => {
     var temparray = [...cardDetails];
     console.log(temparray);
   };
 
+  // State variables for hovered title and description
   const [hoveredTitle, setHoveredTitle] = useState(null);
   const [hoveredDescription, setHoveredDescription] = useState(null);
 
@@ -154,6 +154,7 @@ const React_Card = () => {
     setHoveredDescription(null);
   };
 
+  // Function to delete the title of a card by its ID
   const handleDeleteTitle = (id) => {
     const updatedValues = [...titleValues];
     updatedValues[id] = ""; // Clear the title
@@ -165,6 +166,7 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
+  // Function to add a title to a card by its ID
   const handleAddTitle = (id) => {
     const updatedValues = [...titleValues];
     updatedValues[id] = "000";
@@ -175,7 +177,7 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
-  // Function to delete the description of a card
+  // Function to delete the description of a card by its ID
   const handleDeleteDescription = (id) => {
     const updatedValues = [...descriptionValues];
     updatedValues[id] = ""; // Clear the description
@@ -187,6 +189,7 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
+  // Function to add a default description to a card by its ID
   const handleAddDescription = (id) => {
     const updatedValues = [...descriptionValues];
     updatedValues[id] = "The card description";
@@ -298,11 +301,6 @@ const React_Card = () => {
                 </div>
               </CardContent>
               <CardActions>
-                {/* {item.editing ? (
-                  <IconButton onClick={() => handleToggleEditing(ind)}>
-                    <SaveIcon />
-                  </IconButton>
-                ) : null} */}
                 <IconButton
                   className="card-delete"
                   onClick={() => handleCardDelete(ind)}
@@ -320,7 +318,7 @@ const React_Card = () => {
                 minHeight: 300,
                 minWidth: 650,
                 display: "flex",
-                flexDirection: "row", // Arrange items horizontally
+                flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
                 backgroundColor: "inherit",
@@ -342,12 +340,12 @@ const React_Card = () => {
                   e.currentTarget.querySelector(
                     ".icon-wrapper"
                   ).style.transform = "scale(1.2)";
-                }} // Increase the size of the icon on mouseover
+                }}
                 onMouseOut={(e) => {
                   e.currentTarget.querySelector(
                     ".icon-wrapper"
                   ).style.transform = "scale(1)";
-                }} // Reset the size of the icon on mouseout
+                }}
                 onClick={handleAddCard}
               >
                 <div
@@ -364,7 +362,7 @@ const React_Card = () => {
       <Button
         color="primary"
         variant="contained"
-        onClick={showDetails} // Attach the saveCardDetails function to the button's onClick event
+        onClick={showDetails}
         style={{ margin: "16px" }}
       >
         Save
