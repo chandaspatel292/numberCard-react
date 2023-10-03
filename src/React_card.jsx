@@ -84,32 +84,33 @@ const React_Card = () => {
     setCardDetails(updatedCards);
   };
 
+  var toolbarOptions = [
+    ["bold", "italic", "underline", "strike"], // toggled buttons
+    [/* "blockquote", */ /* "code-block", */ "link"],
+
+    /* [{ header: 1 }, { header: 2 }], */ // custom button values
+    /* [{ list: "ordered" }, { list: "bullet" }], */
+    [{ script: "sub" }, { script: "super" }], // superscript/subscript
+    /* [{ indent: "-1" }, { indent: "+1" }], */ // outdent/indent
+    /* [{ direction: "rtl" }], */ // text direction
+
+    /* [{ size: ["small", false, "large", "huge"] }],  */ // custom dropdown
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ align: [] }],
+
+    ["clean"], // remove formatting button
+  ];
+
   const modules = {
-    toolbar: [
-      /* [{ size: [] } { font: [] }], */
-      ["bold", "italic", "underline" /* "strike" */],
-      [{ color: [] } /* , { background: [] }, { align: [] } */],
-      ["link"],
-    ],
+    toolbar: toolbarOptions,
   };
 
   const showDetails = () => {
     var temparray = [...cardDetails];
     console.log(temparray);
   };
-
-  const formats = [
-    /* "align", */
-    /* "background", */
-    "bold",
-    "color",
-    "font",
-    /* "strike", */
-    "italic",
-    "link",
-    "size",
-    "underline",
-  ];
 
   const [hoveredTitle, setHoveredTitle] = useState(null);
   const [hoveredDescription, setHoveredDescription] = useState(null);
@@ -196,7 +197,6 @@ const React_Card = () => {
                             handleTitleChange(ind, content)
                           }
                           modules={modules}
-                          formats={formats}
                           style={{ margin: "4px", width: "100%" }}
                         />
                       ) : (
@@ -235,7 +235,6 @@ const React_Card = () => {
                             handleDescriptionChange(ind, value)
                           }
                           modules={modules}
-                          formats={formats}
                           style={{ margin: "4px", width: "100%" }}
                         />
                       ) : (
