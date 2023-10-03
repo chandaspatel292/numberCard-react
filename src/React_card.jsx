@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardActions,
+  Container,
   Grid,
   IconButton,
   TextField,
@@ -20,7 +21,7 @@ import "react-quill/dist/quill.snow.css";
 
 const InitialCardDetails = {
   card_id: 1,
-  card_title: "Untitled",
+  card_title: "000",
   card_description: "The card description",
   card_delete: true,
   editing: true,
@@ -38,7 +39,7 @@ const React_Card = () => {
   const handleAddCard = () => {
     const newCard = {
       card_id: cardDetails.length + 1,
-      card_title: "Untitled",
+      card_title: "000",
       card_description: "The card description",
       card_delete: true,
       editing: true,
@@ -145,11 +146,11 @@ const React_Card = () => {
 
   const handleAddTitle = (id) => {
     const updatedValues = [...titleValues];
-    updatedValues[id] = "Untitled";
+    updatedValues[id] = "000";
     setTitleValues(updatedValues);
 
     const updatedCards = [...cardDetails];
-    updatedCards[id].card_title = "Untitled";
+    updatedCards[id].card_title = "000";
     setCardDetails(updatedCards);
   };
 
@@ -176,17 +177,18 @@ const React_Card = () => {
   };
 
   return (
-    <div style={{ maxWidth: "1500px" }}>
+    <Container>
       <Grid container spacing={3} justify="center">
         {cardDetails.map((item, ind) => (
-          <Grid key={item.card_id} item xs={4} sm={6} md={4}>
-            <Card sx={{ width: "100%", minHeight: 300 }}>
+          <Grid key={item.card_id} item xs={4} sm={4} md={4}>
+            <Card sx={{ minWidth: 300, minHeight: 300 }}>
               <CardContent>
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    minWidth: "100%",
                   }}
                 >
                   <div
@@ -281,27 +283,56 @@ const React_Card = () => {
                   className="card-delete"
                   onClick={() => handleCardDelete(ind)}
                 >
-                  <DeleteIcon color="red" />
+                  <DeleteIcon />
                 </IconButton>
               </CardActions>
             </Card>
           </Grid>
         ))}
         {cardDetails.length < 9 ? (
-          <Grid item xs={4}>
+          <Grid item xs={4} sm={4} md={4}>
             <Card
               sx={{
-                width: "100%",
                 minHeight: 300,
-                minWidth: 300,
+                minWidth: 650,
                 display: "flex",
+                flexDirection: "row", // Arrange items horizontally
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
+                justifyContent: "space-between",
+                backgroundColor: "inherit",
+                boxShadow: "none",
               }}
-              onClick={handleAddCard}
             >
-              <AddBoxIcon fontSize="large" />
+              <div
+                style={{
+                  minHeight: "300px",
+                  backgroundColor: "white",
+                  minWidth: "300px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  borderRadius: "5px",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.querySelector(
+                    ".icon-wrapper"
+                  ).style.transform = "scale(1.2)";
+                }} // Increase the size of the icon on mouseover
+                onMouseOut={(e) => {
+                  e.currentTarget.querySelector(
+                    ".icon-wrapper"
+                  ).style.transform = "scale(1)";
+                }} // Reset the size of the icon on mouseout
+                onClick={handleAddCard}
+              >
+                <div
+                  className="icon-wrapper"
+                  style={{ transition: "transform 0.3s ease" }}
+                >
+                  <AddBoxIcon fontSize="large" />
+                </div>
+              </div>
             </Card>
           </Grid>
         ) : null}
@@ -314,7 +345,7 @@ const React_Card = () => {
       >
         Save
       </Button>
-    </div>
+    </Container>
   );
 };
 
