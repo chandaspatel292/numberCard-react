@@ -110,7 +110,7 @@ const React_Card = () => {
   ];
 
   return (
-    <>
+    <div style={{ maxWidth: "1500px" }}>
       <Grid container spacing={3} justify="center" margin={"8px"}>
         {cardDetails.map((item, ind) => (
           <Grid key={item.card_id} item xs={12} sm={6} md={4}>
@@ -120,7 +120,7 @@ const React_Card = () => {
                   <div>
                     <ReactQuill
                       key={`title-${ind}`}
-                      theme="snow" // Use a unique key for each ReactQuill component
+                      theme="snow"
                       value={item.card_title}
                       onChange={(content) => handleTitleChange(ind, content)}
                       modules={modules}
@@ -198,7 +198,7 @@ const React_Card = () => {
       >
         Save
       </Button>
-    </>
+    </div>
   );
 };
 
